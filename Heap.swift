@@ -41,6 +41,17 @@ public struct Heap<T> {
         return nodes.count
     }
     
-    @inline(__always) internal func 
+    @inline(__always) internal func parentIndex(ofIndex i: Int) -> Int {
+        return (i-1)/2
+    }
+    
+    @inline(__always) internal func leftChildIndex(ofIndex i: Int) -> Int {
+        return (2*i + 1)
+    }
+    
+    @inline(__always) internal func rightChildIndex(ofIndex i: Int) -> Int {
+        return (2*i + 2)
+    }
+    
 }
 
