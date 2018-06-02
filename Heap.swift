@@ -23,6 +23,7 @@ public struct Heap<T> {
         configureHeap(from: array)
     }
     
+    // building Heap
     private mutating func configureHeap(from array: [T]) {
         nodes = array
         for i in stride(from: (nodes.count/2-1), through: 0, by: -1) {
@@ -30,6 +31,14 @@ public struct Heap<T> {
         }
     }
     
+    // is the heap is empty or not
+    public var isEmpty: Bool {
+        return nodes.isEmpty
+    }
     
+    // number of nodes in the heap
+    public var count: Int {
+        
+    }
 }
 
