@@ -56,6 +56,31 @@ public struct Heap<T> {
         return (2*i + 2)
     }
     
+    // top element in the Heap
+    // maximum for max-heap and minimum for min-heap
+    public func peek() -> T? {
+        return nodes.first
+    }
     
+    // inserting a single element
+    public mutating func insert(_ value: T) {
+        nodes.append(value)
+        shiftUp(nodes.count - 1)
+    }
+    
+    // function adds the sequence of values to the heap.
+    // this reorders the heap so that the max heap or
+    // min-heap property still holds. O(logn)
+    public mutating func insert<S: Sequence>(_ sequence: S) where S.Iterator.Element == T {
+        // insert each value of the sequence to the heap
+        for value in sequence {
+            insert(value)
+        }
+    }
+    
+    /** allows to change an element. This reorders the heap
+        so that the
+ 
+     **/
 }
 
