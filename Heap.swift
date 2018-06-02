@@ -38,7 +38,9 @@ public struct Heap<T> {
     
     // number of nodes in the heap
     public var count: Int {
-        
+        return nodes.count
     }
+    
+    @inline(__always) internal func 
 }
 
