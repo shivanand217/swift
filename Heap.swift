@@ -9,7 +9,7 @@ import Foundation
 
 public struct Heap<T> {
     
-    // type of nodes and number of nodes
+    // type of nodes contained in the array
     var nodes = [T]()
     
     private var orderCriteria: (T, T) -> Bool
@@ -79,8 +79,87 @@ public struct Heap<T> {
     }
     
     /** allows to change an element. This reorders the heap
-        so that the
- 
+        so that the max-heap or min-heap property still holds
      **/
+    public mutating func replace(index i: Int, value: T) {
+        
+        // check that this index is less than the total nodes count in the heap
+        guard i < nodes.count else { return }
+        
+        remove(at: i)
+        insert(value)
+    }
+    
+    /** Remove the root node from the heap in O(logn) **/
+    @discardableResult public mutating func remove() -> T? {
+       
+        guard !nodes.isEmpty else { return nil }
+        
+        if nodes.count == 1 {
+            return nodes.removeLast()
+        } else {
+            // use the last node to replace the first one
+            // then fix the heap by shifting this new first node into its proper position
+            let value = nodes[0]
+            nodes[0] = nodes.removeLast()
+            shiftDown(0)
+            return value
+        }
+    }
+    
+    internal mutating func shiftUp(_ index: Int) {
+        
+        var childIndex = index
+        let child = nodes[childIndex]
+        var parentIndex = self.parentIndex(ofIndex: childIndex)
+        
+        while childIndex > 0 && orderCriteria(child, nodes[parentIndex]) {
+            nodes[childIndex] = nodes[parentIndex]
+            childIndex = parentIndex
+            parentIndex = self.parentIndex(ofIndex: childIndex)
+        }
+        nodes[childIndex] = child
+    }
+    
+    internal mutating func shiftDown(from index: Int, until endIndex: Int) {
+        
+        let leftChildIndex = self.leftChildIndex(ofIndex: index)
+        let rightChildIndex = leftChildIndex + 1
+        
+        var first = index
+        if leftChildIndex < endIndex && orderCriteria(nodes[leftChildIndex],nodes[first]) {
+            first = leftChildIndex
+        }
+        if rightChildIndex < endIndex && orderCriteria(nodes[rightChildIndex],nodes[first]) {
+            first = rightChildIndex
+        }
+        if first == index { return }
+        
+        nodes.swapAt(index, first)
+        shiftDown(from: first, until: endIndex)
+    }
+    
+    internal mutating func shiftDown(_ index: Int) {
+        shiftDown(from: index, until: nodes.count)
+    }
+    
 }
+
+
+extension Heap where T: Equatable {
+    
+    public func index(of node: T) -> Int? {
+        return nodes.index(where: {$0 == node })
+    }
+    
+    /** Removes the first occurrence of a node from the heap. **/
+    @discardableResult public mutating func remove(node: T) -> T? {
+        if let index = index(of: node) {
+            return remove(at: index)
+        }
+        
+        return nil
+    }
+}
+
 
